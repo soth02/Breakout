@@ -235,6 +235,8 @@ function handleKeyUp(event) {
   }
 }
 
+let initialTouchX;
+
 function handleTouchStart(event) {
   event.preventDefault();
   initialTouchX = event.touches[0].clientX;
