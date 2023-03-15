@@ -1,4 +1,4 @@
-// 1. Initialize the canvas and context
+// 1. the canvas and context
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -40,6 +40,17 @@ const bricks = {
   marginTop: canvas.height * 0.1,
   marginLeft: canvas.width * 0.04,
 };
+
+function initializeBricks() {
+  for (let row = 0; row < bricks.rows; row++) {
+    brick[row] = [];
+    for (let column = 0; column < bricks.columns; column++) {
+      brick[row][column] = { x: 0, y: 0, status: 1 };
+    }
+  }
+}
+
+initializeBricks();
 
 let score = 0;
 let lives = 3;
