@@ -148,7 +148,32 @@ function createAdditionalBall(x, y) {
   return newBall;
 }
 
+let touchStartX;
+
+function touchStartHandler(e) {
+  e.preventDefault();
+  touchStartX = e.touches[0].clientX;
+}
+
+function touchMoveHandler(e) {
+  e.preventDefault();
+  const touchX = e.touches[0].clientX;
+  const deltaX = touchX - touchStartX;
+
+  paddle.x += deltaX;
+  paddle.x = Math.max(0, Math.min(canvas.width - paddle.width, paddle.x));
+
+  touchStartX = touchX;
+}
+
+function touchEndHandler(e) {
+  e.preventDefault();
+}
+
 // 4. Event listeners for user input
+canvas.addEventListener("touchstart", touchStartHandler, false);
+canvas.addEventListener("touchmove", touchMoveHandler, false);
+canvas.addEventListener("touchend", touchEndHandler, false);
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
