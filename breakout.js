@@ -240,6 +240,14 @@ let initialTouchX;
 function handleTouchStart(event) {
   event.preventDefault();
   initialTouchX = event.touches[0].clientX;
+
+  // Touch hold press
+  const touchX = event.touches[0].clientX;
+  if (touchX < canvas.width / 2) {
+    leftPressed = true;
+  } else {
+    rightPressed = true;
+  }
 }
 
 function handleTouchMove(event) {
@@ -258,22 +266,10 @@ function handleTouchMove(event) {
   }
 }
 
-function handleTouchPress(event) {
-  event.preventDefault();
-  const touchX = event.touches[0].clientX;
-  if (touchX < canvas.width / 2) {
-    leftPressed = true;
-  } else {
-    rightPressed = true;
-  }
-}
-
 function handleTouchEnd(event) {
   leftPressed = false;
   rightPressed = false;
 }
-
-canvas.addEventListener("touchstart", handleTouchPress, { passive: false });
 
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
