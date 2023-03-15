@@ -1,32 +1,44 @@
 // 1. Initialize the canvas and context
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-// 2. Define game variables
-const ball = {
-  x: canvas.width / 2,
-  y: canvas.height - 30,
-  dx: 2,
-  dy: -2,
-  radius: 10,
-};
+// Set the canvas size based on the window size
+function setCanvasSize() {
+  const maxWidth = window.innerWidth * 0.9;
+  const maxHeight = window.innerHeight * 0.9;
+  const aspectRatio = 480 / 320;
 
-const paddle = {
-  width: 75,
-  height: 10,
-  x: (canvas.width - 75) / 2,
-  dx: 7,
-};
+  if (maxWidth / maxHeight > aspectRatio) {
+    canvas.width = maxHeight * aspectRatio;
+    canvas.height = maxHeight;
+  } else {
+    canvas.width = maxWidth;
+    canvas.height = maxWidth / aspectRatio;
+  }
+}
+
+// Call setCanvasSize to set the initial canvas size
+setCanvasSize();
+
+// Handle window resize events
+window.addEventListener('resize', () => {
+  setCanvasSize();
+});
+
+// Define game elements using relative units
+const ballRadius = canvas.width * 0.02;
+const paddleHeight = canvas.height * 0.03;
+const paddleWidth = canvas.width * 0.2;
+const paddleX = (canvas.width - paddleWidth) / 2;
 
 const bricks = {
   rows: 3,
   columns: 5,
-  width: 75,
-  height: 20,
-  padding: 10,
-  offsetX: 30,
-  offsetY: 30,
-  bricksArray: [],
+  width: canvas.width * 0.18,
+  height: canvas.height * 0.06,
+  padding: canvas.width * 0.02,
+  marginTop: canvas.height * 0.1,
+  marginLeft: canvas.width * 0.04,
 };
 
 let score = 0;
