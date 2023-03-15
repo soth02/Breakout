@@ -201,23 +201,29 @@ function handleKeyUp(event) {
 }
 
 function handleTouchStart(event) {
-  const touchX = event.touches[0].clientX;
-  if (touchX < canvas.width / 2) {
-    leftPressed = true;
-  } else {
-    rightPressed = true;
-  }
+  event.preventDefault();
+  initialTouchX = event.touches[0].clientX;
 }
 
-function handleTouchEnd(event) {
-  leftPressed = false;
-  rightPressed = false;
+function handleTouchMove(event) {
+  event.preventDefault();
+  const touchX = event.touches[0].clientX;
+  const deltaX = touchX - initialTouchX;
+  paddle.x += deltaX;
+  initialTouchX = touchX;
+
+  // Prevent the paddle from moving outside the canvas
+  if (paddle.x < 0) {
+    paddle.x = 0;
+  } else if (paddle.x > canvas.width - paddle.width) {
+    paddle.x = canvas.width - paddle.width;
+  }
 }
 
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
 canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
 
 // 10. Start the game loop
 gameLoop();
