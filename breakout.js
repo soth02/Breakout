@@ -41,16 +41,20 @@ const bricks = {
   marginLeft: canvas.width * 0.04,
 };
 
+// Initialize brick array
+const brickArray = [];
+
 function initializeBricks() {
   for (let row = 0; row < bricks.rows; row++) {
-    brick[row] = [];
+    brickArray[row] = [];
     for (let column = 0; column < bricks.columns; column++) {
-      brick[row][column] = { x: 0, y: 0, status: 1 };
+      brickArray[row][column] = { x: 0, y: 0, status: 1 };
     }
   }
 }
 
 initializeBricks();
+
 
 let score = 0;
 let lives = 3;
@@ -89,11 +93,11 @@ function drawPaddle() {
 function drawBricks() {
   for (let r = 0; r < bricks.rows; r++) {
     for (let c = 0; c < bricks.columns; c++) {
-      if (bricks.bricksArray[r][c].status === 1) {
-        let brickX = c * (bricks.width + bricks.padding) + bricks.offsetX;
-        let brickY = r * (bricks.height + bricks.padding) + bricks.offsetY;
-        bricks.bricksArray[r][c].x = brickX;
-        bricks.bricksArray[r][c].y = brickY;
+      if (brickArray[r][c].status === 1) {
+        let brickX = c * (bricks.width + bricks.padding) + bricks.marginLeft;
+        let brickY = r * (bricks.height + bricks.padding) + bricks.marginTop;
+        brickArray[r][c].x = brickX;
+        brickArray[r][c].y = brickY;
         ctx.beginPath();
         ctx.rect(brickX, brickY, bricks.width, bricks.height);
         ctx.fillStyle = "green";
@@ -165,23 +169,22 @@ function detectCollisions() {
   }
 
   // Ball-brick collisions
-  for (let r = 0; r < bricks.rows; r++) {
-    for (let c = 0; c < bricks.columns; c++) {
-      let brick = bricks.bricksArray[r][c];
-      if (brick.status === 1) {
-        if (
-          ball.x > brick.x &&
-          ball.x < brick.x + bricks.width &&
-          ball.y > brick.y &&
-          ball.y < brick.y + bricks.height
-        ) {
-          ball.dy = -ball.dy;
-          brick.status = 0;
-          score++;
-          if (score === bricks.rows * bricks.columns) {
-            alert("Congratulations, you won!");
-            document.location.reload();
-          }
+for (let r = 0; r < bricks.rows; r++) {
+  for (let c = 0; c < bricks.columns; c++) {
+    let brick = brickArray[r][c];
+    if (brick.status === 1) {
+      if (
+        ball.x > brick.x &&
+        ball.x < brick.x + bricks.width &&
+        ball.y > brick.y &&
+        ball.y < brick.y + bricks.height
+      ) {
+        ball.dy = -ball.dy;
+        brick.status = 0;
+        score++;
+        if (score === bricks.rows * bricks.columns) {
+          alert("Congratulations, you won!");
+          document.location.reload();
         }
       }
     }
