@@ -215,10 +215,20 @@ function handleKeyUp(event) {
 function handleTouchStart(event) {
   event.preventDefault();
   initialTouchX = event.touches[0].clientX;
+  
+  // Touch hold press
+  const touchX = event.touches[0].clientX;
+  if (touchX < canvas.width / 2) {
+    leftPressed = true;
+  } else {
+    rightPressed = true;
+  }
 }
 
 function handleTouchMove(event) {
   event.preventDefault();
+  
+  // Sliding touch
   const touchX = event.touches[0].clientX;
   const deltaX = touchX - initialTouchX;
   paddle.x += deltaX;
@@ -232,10 +242,16 @@ function handleTouchMove(event) {
   }
 }
 
+function handleTouchEnd(event) {
+  leftPressed = false;
+  rightPressed = false;
+}
+
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
 canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
 canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
 
 // 10. Start the game loop
 gameLoop();
