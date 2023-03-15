@@ -1,6 +1,6 @@
 // 1. the canvas and context
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
 // Set the canvas size based on the window size
 function setCanvasSize() {
@@ -21,7 +21,7 @@ function setCanvasSize() {
 setCanvasSize();
 
 // Handle window resize events
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   setCanvasSize();
 });
 
@@ -30,6 +30,22 @@ const ballRadius = canvas.width * 0.02;
 const paddleHeight = canvas.height * 0.03;
 const paddleWidth = canvas.width * 0.2;
 const paddleX = (canvas.width - paddleWidth) / 2;
+
+const ball = {
+  x: canvas.width / 2,
+  y: canvas.height - 30,
+  dx: 2,
+  dy: -2,
+  radius: ballRadius,
+};
+
+const paddle = {
+  x: paddleX,
+  y: canvas.height - paddleHeight,
+  width: paddleWidth,
+  height: paddleHeight,
+  dx: 7,
+};
 
 const bricks = {
   rows: 3,
@@ -55,18 +71,10 @@ function initializeBricks() {
 
 initializeBricks();
 
-
 let score = 0;
 let lives = 3;
 let rightPressed = false;
 let leftPressed = false;
-
-for (let r = 0; r < bricks.rows; r++) {
-  bricks.bricksArray[r] = [];
-  for (let c = 0; c < bricks.columns; c++) {
-    bricks.bricksArray[r][c] = { x: 0, y: 0, status: 1 };
-  }
-}
 
 // 3. Create a function to draw the game elements
 function drawBall() {
@@ -169,22 +177,23 @@ function detectCollisions() {
   }
 
   // Ball-brick collisions
-for (let r = 0; r < bricks.rows; r++) {
-  for (let c = 0; c < bricks.columns; c++) {
-    let brick = brickArray[r][c];
-    if (brick.status === 1) {
-      if (
-        ball.x > brick.x &&
-        ball.x < brick.x + bricks.width &&
-        ball.y > brick.y &&
-        ball.y < brick.y + bricks.height
-      ) {
-        ball.dy = -ball.dy;
-        brick.status = 0;
-        score++;
-        if (score === bricks.rows * bricks.columns) {
-          alert("Congratulations, you won!");
-          document.location.reload();
+  for (let r = 0; r < bricks.rows; r++) {
+    for (let c = 0; c < bricks.columns; c++) {
+      let brick = brickArray[r][c];
+      if (brick.status === 1) {
+        if (
+          ball.x > brick.x &&
+          ball.x < brick.x + bricks.width &&
+          ball.y > brick.y &&
+          ball.y < brick.y + bricks.height
+        ) {
+          ball.dy = -ball.dy;
+          brick.status = 0;
+          score++;
+          if (score === bricks.rows * bricks.columns) {
+            alert("Congratulations, you won!");
+            document.location.reload();
+          }
         }
       }
     }
@@ -211,17 +220,17 @@ function gameLoop() {
 
 // 9. Add event listeners for keyboard input
 function handleKeyDown(event) {
-  if (event.key === 'ArrowRight') {
+  if (event.key === "ArrowRight") {
     rightPressed = true;
-  } else if (event.key === 'ArrowLeft') {
+  } else if (event.key === "ArrowLeft") {
     leftPressed = true;
   }
 }
 
 function handleKeyUp(event) {
-  if (event.key === 'ArrowRight') {
+  if (event.key === "ArrowRight") {
     rightPressed = false;
-  } else if (event.key === 'ArrowLeft') {
+  } else if (event.key === "ArrowLeft") {
     leftPressed = false;
   }
 }
@@ -229,7 +238,7 @@ function handleKeyUp(event) {
 function handleTouchStart(event) {
   event.preventDefault();
   initialTouchX = event.touches[0].clientX;
-  
+
   // Touch hold press
   const touchX = event.touches[0].clientX;
   if (touchX < canvas.width / 2) {
@@ -241,7 +250,7 @@ function handleTouchStart(event) {
 
 function handleTouchMove(event) {
   event.preventDefault();
-  
+
   // Sliding touch
   const touchX = event.touches[0].clientX;
   const deltaX = touchX - initialTouchX;
@@ -261,11 +270,11 @@ function handleTouchEnd(event) {
   rightPressed = false;
 }
 
-document.addEventListener('keydown', handleKeyDown);
-document.addEventListener('keyup', handleKeyUp);
-canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
-canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
-canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
+canvas.addEventListener("touchmove", handleTouchMove, { passive: false });
+canvas.addEventListener("touchend", handleTouchEnd, { passive: false });
 
 // 10. Start the game loop
 gameLoop();
