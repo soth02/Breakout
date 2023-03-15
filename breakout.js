@@ -185,23 +185,39 @@ function gameLoop() {
 
 // 9. Add event listeners for keyboard input
 function handleKeyDown(event) {
-  if (event.key === "ArrowRight") {
+  if (event.key === 'ArrowRight') {
     rightPressed = true;
-  } else if (event.key === "ArrowLeft") {
+  } else if (event.key === 'ArrowLeft') {
     leftPressed = true;
   }
 }
 
 function handleKeyUp(event) {
-  if (event.key === "ArrowRight") {
+  if (event.key === 'ArrowRight') {
     rightPressed = false;
-  } else if (event.key === "ArrowLeft") {
+  } else if (event.key === 'ArrowLeft') {
     leftPressed = false;
   }
 }
 
-document.addEventListener("keydown", handleKeyDown);
-document.addEventListener("keyup", handleKeyUp);
+function handleTouchStart(event) {
+  const touchX = event.touches[0].clientX;
+  if (touchX < canvas.width / 2) {
+    leftPressed = true;
+  } else {
+    rightPressed = true;
+  }
+}
+
+function handleTouchEnd(event) {
+  leftPressed = false;
+  rightPressed = false;
+}
+
+document.addEventListener('keydown', handleKeyDown);
+document.addEventListener('keyup', handleKeyUp);
+canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
 
 // 10. Start the game loop
 gameLoop();
